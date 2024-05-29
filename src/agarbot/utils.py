@@ -7,6 +7,12 @@ import threading
 import os
 import pandas as pd
 
+assets_path = os.path.realpath(os.path.join(
+    __file__,
+    "..",
+    "assets"
+))
+
 def loading_text(text):
     stop_looping=[False]
     def looping_line(s, stop):

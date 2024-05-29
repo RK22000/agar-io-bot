@@ -5,7 +5,11 @@ import threading
 from PIL import Image
 import numpy as np
 import importlib
+import utils
 pag.useImageNotFoundException(False)
+
+cont_pic = os.path.join(utils.assets_path, "pics", "cont.png")
+play_pic = os.path.join(utils.assets_path, "pics", "play.png")
 
 def prep_for_round():
     #====================================================
@@ -16,14 +20,14 @@ def prep_for_round():
         count+=1
         if count == 10: pag.hotkey('ctrl','r')
         if count == 20: return False
-        box = pag.locateOnScreen('pics\\play.png', confidence=0.9)
+        box = pag.locateOnScreen(play_pic, confidence=0.9)
         if box is not None:
             break
         print("Go to https://agar.io/")
         time.sleep(1)
     pag.press('f11')
     time.sleep(1)
-    box = pag.locateOnScreen('pics\\play.png', confidence=0.8)
+    box = pag.locateOnScreen(play_pic, confidence=0.8)
     if box is None: 
         pag.press('f11')
         raise Exception("Could not find play button")
@@ -35,8 +39,6 @@ def prep_for_round():
 def run_round(model, cycle_time=0.05, before_act=lambda img:None, after_act=lambda img:None, timeout=float('inf')):
     pag.leftClick() # Click the start button
     time.sleep(1)
-    cont_pic = os.path.join("pics", "cont.png")
-    play_pic = os.path.join("pics", "play.png")
     game_over = lambda img: pag.locate(cont_pic, img) is not None or pag.locate(play_pic, img) is not None
     run_round.running = True
     def _game_over():
@@ -70,10 +72,10 @@ def run_round(model, cycle_time=0.05, before_act=lambda img:None, after_act=lamb
 
     pag.press('f11')
     time.sleep(1)
-    box=pag.locateOnScreen("pics\\cont.png", confidence=0.8)
+    box=pag.locateOnScreen(cont_pic, confidence=0.8)
     click=True
     if box is None:
-        box = pag.locateOnScreen('pics\\play.png', confidence=0.8)
+        box = pag.locateOnScreen(play_pic, confidence=0.8)
         click=False
     if box is None:
         raise Exception("Could not find continue button nor play button")
@@ -95,7 +97,7 @@ def act(img: Image, model):
     # pred *= min(pag.size())
     # pred += [i/2 for i in pag.size()]
 
-if __name__=='__main__':
+def main_cli():
     import argparse
     parser = argparse.ArgumentParser("python main2.py", description="This script runs the agar io bot.")
     parser.add_argument("-r", type=int, default=1, help="How many rounds of agar io to play")
@@ -105,3 +107,6 @@ if __name__=='__main__':
         print(f"Round: {round}")
         if prep_for_round():
             run_round(tflite_ensemble)
+
+if __name__=="__main__":
+    main_cli()

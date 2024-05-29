@@ -6,11 +6,11 @@ import tensorflow as tf
 from tensorflow import keras
 from keras import layers
 import numpy as np
-import utils
+import utils as utils
 import os
 import time
 
-tflite_path = "model.tflite"
+tflite_path = os.path.join(utils.assets_path, "model.tflite")
 interpreter = tf.lite.Interpreter(model_path=tflite_path)
 lite_model = interpreter.get_signature_runner('serving_default')
 
