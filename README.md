@@ -8,6 +8,6 @@ The snapshots immediately before a game ending collision were labeled `danger` a
 collision were labeled `safe`.
 - [x] Trained a binary classifier to classify the images as `safe` or `dangeroud`.
 - [x] Use the classifier to determine danger in multiple directions use that to inform play.
-- [ ] Used `pyautogui` to control mouse
+- [x] Used `pyautogui` to control mouse
 
 ![Screenshot 2024-08-01 003654](https://github.com/user-attachments/assets/57d90efb-a459-45fd-9291-61bc60190d77)
